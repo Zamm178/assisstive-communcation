@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Detection</title>
+</head>
+<body>
+    <h1>Facial Emotion Recognition</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="capture">Analyze Emotion</button>
+    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+    <p id="result"></p>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture');
+        const resultText = document.getElementById('result');
+
+        // Access the user's webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => { video.srcObject = stream; })
+            .catch(err => { console.error("Webcam access denied:", err); });
+
+        captureButton.addEventListener('click', async () => {
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Convert canvas to image blob
+            canvas.toBlob(async (blob) => {
+                const formData = new FormData();
+                formData.append('image', blob, 'frame.jpg');
+
+                const response = await fetch('http://127.0.0.1:5000/analyze_emotion', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    resultText.innerText = "Emotion: " + data.emotions[0].emotion;
+                } else {
+                    resultText.innerText = "Error: " + data.error;
+                }
+            }, 'image/jpeg');
+        });
+    </script>
+</body>
+</html>
