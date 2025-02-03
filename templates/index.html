@@ -3,14 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emotion Detection</title>
+    <title>Facial Emotion Recognition</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #video {
+            border: 5px solid #007BFF;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        #capture {
+            background-color: #007BFF;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #capture:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #007BFF;
+        }
+
+        canvas {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <h1>Facial Emotion Recognition</h1>
     <video id="video" width="640" height="480" autoplay></video>
     <button id="capture">Analyze Emotion</button>
-    <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
-    <p id="result"></p>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <div id="result"></div>
 
     <script>
         const video = document.getElementById('video');
