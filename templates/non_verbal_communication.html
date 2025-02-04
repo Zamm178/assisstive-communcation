@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facial Emotion Recognition & Non-Verbal Communication</title>
+    <title>Non-Verbal Communication</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -22,26 +22,44 @@
             margin-bottom: 20px;
         }
 
-        .link-button {
+        button {
             background-color: #007BFF;
             color: white;
             padding: 12px 24px;
             border: none;
             border-radius: 5px;
             font-size: 16px;
-            cursor: pointer;
             margin: 10px;
-            text-decoration: none;
+            cursor: pointer;
         }
 
-        .link-button:hover {
+        button:hover {
             background-color: #0056b3;
+        }
+
+        a {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #007BFF;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to the Facial Emotion Recognition & Non-Verbal Communication App</h1>
-    <a href="/emotion_recognition" class="link-button">Go to Facial Emotion Recognition</a>
-    <a href="/non_verbal_communication" class="link-button">Go to Non-Verbal Communication</a>
+    <h1>Non-Verbal Communication</h1>
+    <button onclick="speak('Hello')">Hello</button>
+    <button onclick="speak('Goodbye')">Goodbye</button>
+    <button onclick="speak('Thank you')">Thank you</button>
+    <button onclick="speak('Sorry')">Sorry</button>
+    <button onclick="speak('Please')">Please</button>
+    <br>
+    <a href="/">Back to Home</a>
+    <a href="/emotion_recognition">Go to Facial Emotion Recognition</a>
+
+    <script>
+        function speak(phrase) {
+            const utterance = new SpeechSynthesisUtterance(phrase);
+            speechSynthesis.speak(utterance);
+        }
+    </script>
 </body>
 </html>

@@ -8,9 +8,17 @@ app = Flask(__name__)
 # Load the face detector
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-@app.route('/')  # Add this route
+@app.route('/')
 def home():
-    return render_template('index.html')  # Serve the frontend page
+    return render_template('index.html')  # Serve the facial emotion recognition page
+
+@app.route('/emotion_recognition')
+def emotion_recognition():
+    return render_template('emotion_recognition.html')  # Facial emotion recognition page
+
+@app.route('/non_verbal_communication')
+def non_verbal_communication():
+    return render_template('non_verbal_communication.html')  # Non-verbal communication page
 
 @app.route('/analyze_emotion', methods=['POST'])
 def analyze_emotion():
