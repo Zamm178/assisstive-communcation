@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Non-Verbal Communication</title>
+    <title>Editable Buttons with Sound</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -22,7 +22,7 @@
             margin-bottom: 20px;
         }
 
-        button {
+        .button {
             background-color: #007BFF;
             color: white;
             padding: 12px 24px;
@@ -33,32 +33,57 @@
             cursor: pointer;
         }
 
-        button:hover {
+        .button:hover {
             background-color: #0056b3;
         }
 
-        a {
+        #add-button {
+            background-color: #28a745;
+            font-size: 20px;
             margin-top: 20px;
-            font-size: 18px;
-            color: #007BFF;
+        }
+
+        input, button {
+            font-size: 16px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Non-Verbal Communication</h1>
-    <button onclick="speak('Hello')">Hello</button>
-    <button onclick="speak('Goodbye')">Goodbye</button>
-    <button onclick="speak('Thank you')">Thank you</button>
-    <button onclick="speak('Sorry')">Sorry</button>
-    <button onclick="speak('Please')">Please</button>
-    <br>
-    <a href="/">Back to Home</a>
-    <a href="/emotion_recognition">Go to Facial Emotion Recognition</a>
-
+    <h1>Editable Buttons with Speech</h1>
+    <div id="button-container">
+        <!-- Buttons will be added here -->
+    </div>
+    <button id="add-button">➕ Add Button</button>
+    <input type="text" id="button-text" placeholder="Enter button text" />
+    <input type="color" id="button-color" />
+    
     <script>
-        function speak(phrase) {
-            const utterance = new SpeechSynthesisUtterance(phrase);
-            speechSynthesis.speak(utterance);
+        let buttonContainer = document.getElementById('button-container');
+        let addButton = document.getElementById('add-button');
+        let buttonText = document.getElementById('button-text');
+        let buttonColor = document.getElementById('button-color');
+
+        // Add event listener to add a new button
+        addButton.addEventListener('click', () => {
+            let text = buttonText.value;
+            let color = buttonColor.value || '#007BFF'; // Default color if not specified
+            if (text.trim() !== "") {
+                createButton(text, color);
+            }
+        });
+
+        // Create a new button with text-to-speech feature
+        function createButton(text, color) {
+            let newButton = document.createElement('button');
+            newButton.classList.add('button');
+            newButton.innerText = text;
+            newButton.style.backgroundColor = color;
+            newButton.addEventListener('click', () => {
+                const utterance = new SpeechSynthesisUtterance(text);
+                speechSynthesis.speak(utterance);
+            });
+            buttonContainer.appendChild(newButton);
         }
     </script>
 </body>
