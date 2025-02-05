@@ -9,15 +9,41 @@
         body {
             font-family: 'Open Sans', sans-serif;
             margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #4a6b8c, #2a3c56); /* Darker blue gradient */
+            padding: 10px;
+            background: linear-gradient(135deg, #4a6b8c, #2a3c56);
             color: #fff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            transition: background-color 0.5s ease;
+        }
+
+        nav {
+            width: 100%;
+            background-color: #0085e0;
+            padding: 10px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0; /* Ensure it's positioned at the top */
+            left: 0;
+            z-index: 999;
+            margin: 0; /* Remove any default margin */
+            box-sizing: border-box; /* Ensure the padding doesn't affect the layout */
+            align-items: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+
+        nav a:hover {
+            background-color: #555;
+            border-radius: 5px;
         }
 
         h1 {
@@ -28,7 +54,7 @@
         }
 
         button {
-            background-color: #0085e0; /* Modern blue color */
+            background-color: #0085e0;
             color: white;
             padding: 15px 30px;
             border: none;
@@ -41,7 +67,7 @@
         }
 
         button:hover {
-            background-color: #006bb3; /* Darker blue for hover */
+            background-color: #006bb3;
             transform: translateY(-4px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
@@ -63,7 +89,7 @@
         }
 
         input:focus, select:focus {
-            box-shadow: 0 0 12px rgba(0, 133, 224, 0.7); /* Blue glow on focus */
+            box-shadow: 0 0 12px rgba(0, 133, 224, 0.7);
             outline: none;
         }
 
@@ -132,10 +158,9 @@
         select {
             font-size: 16px;
             background-color: #fff;
-            border: 2px solid #0085e0; /* Border with modern blue */
+            border: 2px solid #0085e0;
         }
 
-        /* Modal fade-in effect */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -154,6 +179,11 @@
     </style>
 </head>
 <body>
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('emotion_recognition') }}">Emotion Recognition</a>
+    </nav>    
+
     <div id="sentence-bar">Current Sentence: <span id="current-sentence">None</span></div>
     <div class="top-bar-buttons">
         <button onclick="clearSentence()">Clear Sentence</button>
@@ -180,7 +210,6 @@
         <!-- Buttons will appear here -->
     </div>
 
-    <!-- Modal for Editing Button -->
     <div id="edit-modal-overlay"></div>
     <div id="edit-modal">
         <h2>Edit Button</h2>
@@ -198,7 +227,6 @@
         let currentButton = null;
         let voices = [];
 
-        // Initialize voices on page load
         function initializeVoices() {
             voices = speechSynthesis.getVoices();
             const voiceSelect = document.getElementById('voiceSelect');
@@ -210,7 +238,6 @@
             });
         }
 
-        // Speak using selected voice
         function speak(phrase) {
             const voiceSelect = document.getElementById('voiceSelect');
             const selectedVoiceName = voiceSelect.value;
@@ -276,12 +303,12 @@
         function saveChanges() {
             const newText = document.getElementById('editText').value;
             const newColor = document.getElementById('editColor').value;
-            
+
             if (newText && currentButton) {
                 currentButton.innerText = newText;
                 currentButton.style.backgroundColor = newColor;
                 currentButton.onclick = function() {
-                    sentence.push(newText);  
+                    sentence.push(newText);
                     speak(newText);
                 };
                 closeModal();
@@ -300,10 +327,7 @@
             document.getElementById('edit-modal-overlay').style.display = 'none';
         }
 
-        // Event listener to initialize voices once they are loaded
         speechSynthesis.onvoiceschanged = initializeVoices;
-
-        // Call initializeVoices initially in case voices are already available
         initializeVoices();
     </script>
 </body>
