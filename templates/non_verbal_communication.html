@@ -3,88 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editable Buttons with Sound</title>
+    <title>Non-Verbal Communication</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Open Sans', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            background: linear-gradient(135deg, #4a6b8c, #2a3c56); /* Darker blue gradient */
+            color: #fff;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
+            transition: background-color 0.5s ease;
         }
 
         h1 {
-            color: #333;
-            margin-bottom: 20px;
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-shadow: 4px 4px 20px rgba(0, 0, 0, 0.3);
+            font-weight: 700;
         }
 
-        .button {
-            background-color: #007BFF;
+        button {
+            background-color: #0085e0; /* Modern blue color */
             color: white;
-            padding: 12px 24px;
+            padding: 15px 30px;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            margin: 10px;
+            border-radius: 8px;
+            font-size: 18px;
+            margin: 15px;
             cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
         }
 
-        .button:hover {
-            background-color: #0056b3;
+        button:hover {
+            background-color: #006bb3; /* Darker blue for hover */
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
-        #add-button {
-            background-color: #28a745;
-            font-size: 20px;
-            margin-top: 20px;
+        button:active {
+            transform: translateY(2px);
         }
 
-        input, button {
+        input, select {
+            padding: 14px 18px;
+            margin: 12px;
             font-size: 16px;
-            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #fff;
+            color: #333;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            box-shadow: 0 0 12px rgba(0, 133, 224, 0.7); /* Blue glow on focus */
+            outline: none;
+        }
+
+        #sentence-bar {
+            width: 80%;
+            padding: 16px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .top-bar-buttons {
+            margin-top: 35px;
+            display: flex;
+            justify-content: center;
+            gap: 22px;
+        }
+
+        #edit-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            color: #333;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            width: 90%;
+            max-width: 500px;
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        #edit-modal input, #edit-modal button {
+            margin: 10px;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 8px;
+        }
+
+        #edit-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            z-index: 999;
+        }
+
+        select {
+            font-size: 16px;
+            background-color: #fff;
+            border: 2px solid #0085e0; /* Border with modern blue */
+        }
+
+        /* Modal fade-in effect */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            justify-content: center;
         }
     </style>
 </head>
 <body>
-    <h1>Editable Buttons with Speech</h1>
-    <div id="button-container">
-        <!-- Buttons will be added here -->
+    <div id="sentence-bar">Current Sentence: <span id="current-sentence">None</span></div>
+    <div class="top-bar-buttons">
+        <button onclick="clearSentence()">Clear Sentence</button>
+        <button onclick="deleteLastWord()">Delete Last Word</button>
+        <button onclick="speakFullSentence()">Speak Full Sentence</button>
     </div>
-    <button id="add-button">➕ Add Button</button>
-    <input type="text" id="button-text" placeholder="Enter button text" />
-    <input type="color" id="button-color" />
-    
+    <h1>Non-Verbal Communication</h1>
+    <div>
+        <label for="buttonText">Button Text: </label>
+        <input type="text" id="buttonText" placeholder="Enter button text" />
+        <label for="buttonColor">Button Color: </label>
+        <input type="color" id="buttonColor" />
+        <button onclick="addButton()">Add Button</button>
+    </div>
+
+    <div>
+        <label for="voiceSelect">Select Voice: </label>
+        <select id="voiceSelect">
+            <!-- Voice options will be populated here -->
+        </select>
+    </div>
+
+    <div id="button-container" class="button-container">
+        <!-- Buttons will appear here -->
+    </div>
+
+    <!-- Modal for Editing Button -->
+    <div id="edit-modal-overlay"></div>
+    <div id="edit-modal">
+        <h2>Edit Button</h2>
+        <label for="editText">Button Text: </label>
+        <input type="text" id="editText" />
+        <label for="editColor">Button Color: </label>
+        <input type="color" id="editColor" />
+        <button onclick="saveChanges()">Save Changes</button>
+        <button onclick="closeModal()">Cancel</button>
+        <button onclick="deleteButton()">Delete Button</button>
+    </div>
+
     <script>
-        let buttonContainer = document.getElementById('button-container');
-        let addButton = document.getElementById('add-button');
-        let buttonText = document.getElementById('button-text');
-        let buttonColor = document.getElementById('button-color');
+        let sentence = [];
+        let currentButton = null;
+        let voices = [];
 
-        // Add event listener to add a new button
-        addButton.addEventListener('click', () => {
-            let text = buttonText.value;
-            let color = buttonColor.value || '#007BFF'; // Default color if not specified
-            if (text.trim() !== "") {
-                createButton(text, color);
-            }
-        });
-
-        // Create a new button with text-to-speech feature
-        function createButton(text, color) {
-            let newButton = document.createElement('button');
-            newButton.classList.add('button');
-            newButton.innerText = text;
-            newButton.style.backgroundColor = color;
-            newButton.addEventListener('click', () => {
-                const utterance = new SpeechSynthesisUtterance(text);
-                speechSynthesis.speak(utterance);
+        // Initialize voices on page load
+        function initializeVoices() {
+            voices = speechSynthesis.getVoices();
+            const voiceSelect = document.getElementById('voiceSelect');
+            voices.forEach(voice => {
+                const option = document.createElement('option');
+                option.textContent = voice.name;
+                option.value = voice.name;
+                voiceSelect.appendChild(option);
             });
-            buttonContainer.appendChild(newButton);
         }
+
+        // Speak using selected voice
+        function speak(phrase) {
+            const voiceSelect = document.getElementById('voiceSelect');
+            const selectedVoiceName = voiceSelect.value;
+            const selectedVoice = voices.find(voice => voice.name === selectedVoiceName);
+            const utterance = new SpeechSynthesisUtterance(phrase);
+            utterance.voice = selectedVoice;
+            speechSynthesis.speak(utterance);
+            updateSentenceBar();
+        }
+
+        function addButton() {
+            const buttonContainer = document.getElementById('button-container');
+            const buttonText = document.getElementById('buttonText').value;
+            const buttonColor = document.getElementById('buttonColor').value;
+
+            if (buttonText) {
+                const newButton = document.createElement('button');
+                newButton.innerText = buttonText;
+                newButton.style.backgroundColor = buttonColor;
+                newButton.onclick = function() {
+                    sentence.push(buttonText);
+                    speak(buttonText);
+                };
+
+                newButton.oncontextmenu = function(event) {
+                    event.preventDefault();
+                    openModal(newButton);
+                };
+
+                buttonContainer.appendChild(newButton);
+            } else {
+                alert("Please enter button text.");
+            }
+        }
+
+        function updateSentenceBar() {
+            document.getElementById('current-sentence').textContent = sentence.join(' ');
+        }
+
+        function clearSentence() {
+            sentence = [];
+            updateSentenceBar();
+        }
+
+        function deleteLastWord() {
+            sentence.pop();
+            updateSentenceBar();
+        }
+
+        function speakFullSentence() {
+            const fullSentence = sentence.join(' ');
+            speak(fullSentence);
+        }
+
+        function openModal(button) {
+            currentButton = button;
+            document.getElementById('editText').value = button.innerText;
+            document.getElementById('editColor').value = button.style.backgroundColor;
+            document.getElementById('edit-modal').style.display = 'block';
+            document.getElementById('edit-modal-overlay').style.display = 'block';
+        }
+
+        function saveChanges() {
+            const newText = document.getElementById('editText').value;
+            const newColor = document.getElementById('editColor').value;
+            
+            if (newText && currentButton) {
+                currentButton.innerText = newText;
+                currentButton.style.backgroundColor = newColor;
+                currentButton.onclick = function() {
+                    sentence.push(newText);  
+                    speak(newText);
+                };
+                closeModal();
+            }
+        }
+
+        function deleteButton() {
+            if (currentButton) {
+                currentButton.remove();
+                closeModal();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('edit-modal').style.display = 'none';
+            document.getElementById('edit-modal-overlay').style.display = 'none';
+        }
+
+        // Event listener to initialize voices once they are loaded
+        speechSynthesis.onvoiceschanged = initializeVoices;
+
+        // Call initializeVoices initially in case voices are already available
+        initializeVoices();
     </script>
 </body>
 </html>
